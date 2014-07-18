@@ -13,10 +13,11 @@ Hstorage = initHstorage(mps,mpo,d);
 count =0;
 while 1
     Evalues = [];
-clc
+
     % ****************** cycle 1: j -> j+1 (from 1 to N-1) **************** 
     for j = 1:(N-1)
-        j=j
+        %count=count+1
+        %j=j
         % optimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -27,13 +28,14 @@ clc
         Evalues = [Evalues,E];
  
         % storage-update 
-        Hstorage{j} = updateCleft(Hleft,A,hsetj,A); 
-     end
-clc
+        Hstorage{j+1} = updateCleft(Hleft,A,hsetj,A); 
+    end
+    count=count+1
 
 % ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
     for j = N:(-1):2
-        j=j
+        %count=count+1
+        %j=j
         % minimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -44,7 +46,7 @@ clc
         Evalues = [Evalues,E];
 
         % storage-update 
-        Hstorage{j+1}=updateCright(Hright,A,hsetj,A); 
+        Hstorage{j}=updateCright(Hright,A,hsetj,A); 
     end
     if (std(Evalues)/abs(mean(Evalues))<precision) 
         mps{1}=contracttensors(mps{1},3,2,U,2,1); 

@@ -1,29 +1,22 @@
-% this function provides the energy E, and ground state mps (with bond-dim D), of an input Hamiltonian (mpo)
-% mpsB (optional if set to []) is a random initial state used to start the algorithm
-function [E,mps]=minimizeE(mpo,D,precision,mpsB)
+function [E,mps]=minimizeE(mpo,D,precision)
 
-N = size(mpo); 
+N = size(mpo,2);
 d = 2; 
 mps = createrandommps(N,D,d); 
-mps = prepare(mps);
+mps = prepare(mps,'rl');
+
 
 % storage-initialization
 Hstorage = initHstorage(mps,mpo,d);
-if ~isempty(mpsB), Cstorage = initCstorage(mps,[],mpsB,N); end
-
+ 
 % optimization sweeps 
+count =0;
 while 1
     Evalues = [];
-
+clc
     % ****************** cycle 1: j -> j+1 (from 1 to N-1) **************** 
     for j = 1:(N-1)
-        % projector-calculation 
-        if ~isempty(mpsB)
-            B = mpsB{j};
-            Cleft = Cstorage{j};
-            Cright = Cstorage{j+1}; 
-        end
-
+        j=j
         % optimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -34,21 +27,13 @@ while 1
         Evalues = [Evalues,E];
  
         % storage-update 
-        Hstorage{j+1} = updateCleft(Hleft{m},A,hsetj,A); 
-        if ~isempty(mpsB) 
-            Cstorage{j+1} = updateCleft(Cleft,A,[],B);
-        end
-    end
-   
-    % ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
+        Hstorage{j} = updateCleft(Hleft,A,hsetj,A); 
+     end
+clc
+
+% ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
     for j = N:(-1):2
-        % projector-calculation 
-        if ~isempty(mpsB)
-            B = mpsB{j};
-            Cleft = Cstorage{j};
-            Cright = Cstorage{j+1}; 
-        end
-        
+        j=j
         % minimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -59,10 +44,7 @@ while 1
         Evalues = [Evalues,E];
 
         % storage-update 
-        Hstorage{j}=updateCright(Hright{m},A,hsetj,A); 
-        if ~isempty(mpsB) 
-            Cstorage{j}=updateCright(Cright,A,[],B);
-        end
+        Hstorage{j+1}=updateCright(Hright,A,hsetj,A); 
     end
     if (std(Evalues)/abs(mean(Evalues))<precision) 
         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
@@ -70,8 +52,3 @@ while 1
         break;
     end
 end
-
-
-
-
-

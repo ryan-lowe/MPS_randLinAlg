@@ -1,6 +1,7 @@
 function [B,U,DB]=prepare_onesite(A,direction)
 
-[D1,D2,d]=size(A); 
+[D1,D2,d]=size(A);
+
 switch direction
     case 'lr'
         A=permute(A,[3,1,2]); %[a1,a2,s]->[s,a1,a2]
@@ -10,7 +11,13 @@ switch direction
         U=S*U; 
     case 'rl'
         A=permute(A,[1,3,2]); A=reshape(A,[D1,d*D2]); 
-        [U,S,B]=svd2(A); DB=size(S,1); 
+%         A=A';
+%         sizeA=size(A)
+        [U,S,B]=svd2(A); DB=size(S,1);%DB=size(B,2); 
+%         sizeU=size(U)
+%         sizeS=size(S)
+%         sizeB=size(B)
+%         B=B';
         B=reshape(B,[DB,d,D2]); B=permute(B,[1,3,2]); 
         U=U*S;
 end

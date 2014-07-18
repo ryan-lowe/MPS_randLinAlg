@@ -1,0 +1,29 @@
+
+n=6;
+m=6;
+k=4;
+p=1;
+A=[ 0 0 0 1 0 0; 
+    0 0 0 0 0 1;
+    0 0 0 0 1 0;
+    0 0 0 0 2 1;
+    0 0 0 0 0 0;
+    0 0 1 0 0 0];
+    
+omega = randn(n,k+p);
+Y = A*omega;
+
+Q=zeros(m,k+p);
+A=zeros(m,k+p);
+%Use Gram-Schmidt
+Q(:,1)=Y(:,1);
+Q(:,i)=(1/sqrt(dot(Q(:,i),Q(:,i))))*Q(:,i);
+A(:,1)=Q(:,1);
+for i = 2:k+p
+    Q(:,i)=Y(:,i)-(dot(Q(:,i-1),Y(:,i)))/(dot(Y(:,i),Y(:,i)))*Q(:,i-1);
+    A(:,i)=Q(:,i);
+    Q(:,i)=(1/sqrt(dot(Q(:,i),Q(:,i))))*Q(:,i);   
+end
+
+display(Y)
+display(Q)

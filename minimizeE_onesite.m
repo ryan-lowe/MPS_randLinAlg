@@ -15,14 +15,26 @@ Heff = contracttensors(Hleft,3,2,hsetj,4,1);
 %sizeHeff=size(Heff)
 %sizeHright=size(Hright)
 Heff = contracttensors(Heff,5,3,Hright,3,2); 
-Heff = permute(Heff,[1,3,5,2,4,6]); 
+
+sizeH=size(Heff)
+
+Heff = permute(Heff,[1,3,5,2,4,6]); %[1,3,2,4,6,5]
 Heff = reshape(Heff,[DAl*DAr*d,DAl*DAr*d]); 
 
+if (Heff==Heff')
+    display('conj works');
+else
+    display('conj doesnt work');
+end
+
+Heff2=Heff
 %
 % optimization
 %
 options.disp = 0; 
 [A,E] = eigs(Heff,1,'sr',options); 
+
+%A==A'
 
 A=reshape(A,[DAl,DAr,d]);
 %sizeA=size(A)

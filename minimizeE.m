@@ -22,7 +22,15 @@ while 1
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
         hsetj = mpo{j};
-        [A,E] = minimizeE_onesite(hsetj,Hleft,Hright); 
+        
+        %for first iteration, Hleft and Hright dimension modifications
+        %by prepare.m cause initialization vector mps{j} for eigs
+        %to be wrong dimension
+        if count==0
+            [A,E] = minimizeE_onesite(hsetj,Hleft,Hright,[]);             
+        else
+            [A,E] = minimizeE_onesite(hsetj,Hleft,Hright,mps{j}); 
+        end
         [A,U] = prepare_onesite(A,'lr');
         mps{j} = A; 
         Evalues = [Evalues,E];
@@ -40,7 +48,7 @@ while 1
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
         hsetj = mpo{j}; 
-        [A,E] = minimizeE_onesite(hsetj,Hleft,Hright); 
+        [A,E] = minimizeE_onesite(hsetj,Hleft,Hright,mps{j}); 
         [A,U] = prepare_onesite(A,'rl');
         mps{j} = A; 
         Evalues = [Evalues,E];
@@ -48,6 +56,8 @@ while 1
         % storage-update 
         Hstorage{j}=updateCright(Hright,A,hsetj,A); 
     end
+    %val = std(Evalues)/abs(mean(Evalues))
+    %Evalues = Evalues
     if (std(Evalues)/abs(mean(Evalues))<precision) 
         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
         mps{1}=permute(mps{1},[1,3,2]);

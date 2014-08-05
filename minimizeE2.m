@@ -1,4 +1,17 @@
 function [E,mps]=minimizeE2(mpo,D,precision)
+%This file finds the value of E that minimizes <y|mpo|y>/<y|y>, where y is
+%any mps, and mpo is the (open boundary) mpo form of some Hamiltonian H. 
+%This is done via a variational search in the MPS space, for the purpose 
+%of finding the ground state of H.
+
+%This code is slightly altered to compute 2 sites at a time, for increased
+%stability benefits
+
+%INPUT: an mpo (mpo form of a Hamiltonian H), matrix dimension D of the
+%mpo, and the desired precision (code will stop once E value changes less
+%than this amount in subsequent iterations)
+%OUTPUT: minimum value E, and the corresponding minimum mps
+
 
 N = size(mpo,2); 
 d = 2; 

@@ -1,6 +1,12 @@
 % ************************ one-site optimization **************************
 
-function [A,E,Heff] = minimizeE_onesite(hsetj,Hleft,Hright,mpsJ)%add previous vector value to use as initial vector in eigs
+function [A,E,Heff] = minimizeE_onesite(hsetj,Hleft,Hright,mpsJ)
+%This file serves as the one-site optimization for minimizeE.m
+%INPUT: Hleft and Hright tensors, as calculated with updateHleft.m and
+%updateHright.m, the current mpo site hsetj, and the previous mps mpsJ,
+%used as an 'iniital vector' for the eigs calculation
+%OUTPUT: Heff, the contraction of Hleft, Hright, and hsetj, and the
+%eigenvector A and eigenvalue E of Heff.
 
 DAl = size(Hleft,1); 
 DAr = size(Hright,1); 
@@ -35,7 +41,7 @@ Heff2=Heff;
 %
 options.disp = 0; 
 
-%initial vector used for eigs calculation
+%initial vector used for eigs calculation (as long as mpsJ isn't empty)
 if size(mpsJ,1)>0
     %sizeJ=size(mpsJ)
     mpsJx=size(mpsJ,1);

@@ -1,6 +1,13 @@
 % ************************ two-site optimization **************************
 
 function [A1,A2,E,Heff] = minimizeE_twosites(hsetj,Hleft,Hright,dir)
+%This file serves as the one-site optimization for minimizeE2.m
+%INPUT: Hleft and Hright tensors, as calculated with updateHleft.m and
+%updateHright.m, the current mpo site hsetj, and the current direction dir
+%that the minimizeE2.m file is traversing
+%OUTPUT: Heff, the contraction of Hleft, Hright, and hsetj, and the
+%eigenvector A and eigenvalue E of Heff.
+
 DAl = size(Hleft,1); 
 DAr = size(Hright,1); 
 d = 2;

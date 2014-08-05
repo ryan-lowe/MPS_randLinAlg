@@ -1,6 +1,6 @@
 function [mpsB,norma,dist]=reduceD(mpsA,mpoX,DB,precision)
 
-% PROVIDES THE VATIATIONALLY REDUCED MPSB, AFTER APPLYING MPOX TO MPSA;
+% PROVIDES THE VARIATIONALLY REDUCED MPSB, AFTER APPLYING MPOX TO MPSA;
 % norma IS THE NORM OF THE OUTPUT STATE; dist IS THE SQUARED 2-NORM
 % DISTANCE FROM THE EXACT STATE
 
@@ -50,7 +50,3 @@ while 1
         break;
     end
 end
-
-
-    
-    

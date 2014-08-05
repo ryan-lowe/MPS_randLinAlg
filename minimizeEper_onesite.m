@@ -1,6 +1,14 @@
 % ************************ one-site optimization **************************
 
 function [A,E,Heff] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,mpsJ)%add previous vector value to use as initial vector in eigs
+%This file serves as the one-site optimization for minimizeEper.m
+%INPUT: Hleft and Hright tensors, as calculated with updateHleft.m and
+%updateHright.m, the current mpo site hsetj, and the previous mps mpsJ,
+%used as an 'iniital vector' for the eigs calculation. Hleft2 is the Hleft
+%for the mps-mps contraction (which is non-zero because of periodic
+%boundary conditions)
+%OUTPUT: Heff, the contraction of Hleft, Hright, and hsetj, and the
+%eigenvector A and eigenvalue E of Heff.
 
 DAl = size(Hleft,1); 
 DAr = size(Hright,1); 

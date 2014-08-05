@@ -1,14 +1,28 @@
 function [mps] = compressSVD(mps,k)
 
+%Ryan's rudimentary version of the SVD compression of an input MPS 
+%state. 
+%INPUT: mps, with the desired final matrix size in output mps to be k x k
+%OUTPUT: compressed mps
+
 N=length(mps);
 
+%Put mps in left canonical form
+
 [mps,~]=prepare(mps,'lr');
+
+%Loop through each site (except for site N)
 
 for i=1:N-1
     [D1,D2,d]=size(mps{i});
     mpstemp=permute(mps{i},[3,1,2]);
+    
+    %perform svd on site    
     mpstemp=reshape(mpstemp,[d*D1,D2]);
     [U,S,V]=svd2(mpstemp);
+    
+    %If the S matrix is larger than k x k, U matrix is compressed by taking
+    %the k most important rows/columns    
     if (length(S)>k)
         S=S(1:k,1:k);
         S=S/norm(S);
@@ -18,10 +32,15 @@ for i=1:N-1
         mps{i}=reshape(mps{i},[d,D1,k]);
         mps{i+1}=contracttensors(S*V,2,2,mps{i+1},3,1);
     else
+        
+        %if not, it retains its original dimensions        
         mps{i}=reshape(mps{i},[d,D1,D2]);
     end
     mps{i}=permute(mps{i},[2,3,1]);
 end
+
+%Slightly modified code for site N
+
 [D1,D2,d]=size(mps{N});
 mpstemp=permute(mps{N},[3,1,2]);
 mpstemp=reshape(mpstemp,[d*D1,D2]);

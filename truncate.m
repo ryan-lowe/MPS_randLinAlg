@@ -20,4 +20,3 @@ switch direction
         end
         [mps{1},U]=truncate_onesite(mps{1},'rl',maxD);
 end
-

@@ -1,14 +1,16 @@
 function [mps] = compress_variational(mps, k)
 
+%Ryan's rudimentary version of the variational compression of an input MPS 
+%state. NOTE: currently just the same as SVD compression algorithm
+%INPUT: mps, with the desired final matrix size in output mps to be k x k
+%OUTPUT: compressed mps
 
 N=length(mps);
 d=size(mps{1},3);
 D=size(mps{1},2);
 
+
 [mps,~]=prepare(mps,'lr');
-
-
-
 
 
 for i=1:N-1

@@ -1,9 +1,15 @@
 function [X,numindX]=contracttensors(X,numindX,indX,Y,numindY,indY)
 
+%Code for contracting two tensors together. 
+%INPUT: two tensors, X and Y. numindX and numindY are the total number of
+%dimensions of X and Y, respectively. indX and indY are the dimensions of X
+%and Y that are to be contracted together
+%OUTPUT: resulting tensor X, and the number of dimensions of X numindX
+
 Xsize=ones(1,numindX); Xsize(1:length(size(X)))=size(X); 
 Ysize=ones(1,numindY); Ysize(1:length(size(Y)))=size(Y);
 
-indXl=1:numindX; indXl(indX)=[]; %the meaning is clear from the use in line 34
+indXl=1:numindX; indXl(indX)=[]; %the meaning is clear from the use in line 39
 indYr=1:numindY; indYr(indY)=[];
 
 sizeXl=Xsize(indXl); 
@@ -57,3 +63,4 @@ X=X*Y;
 Xsize=[Xsize(indXl),Ysize(indYr)]; 
 numindX=length(Xsize); 
 X=reshape(X,[Xsize,1]);
+

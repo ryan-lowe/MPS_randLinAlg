@@ -6,8 +6,8 @@ function [mps]=createrandommps(N,D,d)
 %OUPUT: a random MPOS
 
 mps=cell(1,N); 
-mps{1}=randn(1,D,d)/sqrt(D); 
-mps{N}=randn(D,1,d)/sqrt(D); 
+mps{1}=randn(1,D,d)/sqrt(D) + 1i*randn(1,D,d)/sqrt(D); 
+mps{N}=randn(D,1,d)/sqrt(D) + 1i*randn(D,1,d)/sqrt(D); 
 for i=2:(N-1)
-    mps{i}=randn(D,D,d)/sqrt(D); 
+    mps{i}=randn(D,D,d)/sqrt(D) + 1i*randn(D,D,d)/sqrt(D); 
 end

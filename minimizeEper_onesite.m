@@ -1,6 +1,6 @@
 % ************************ one-site optimization **************************
 
-function [A,E,Heff] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,mpsJ)%add previous vector value to use as initial vector in eigs
+function [A,E,Heff] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,Hright2,hsetId,mpsJ)
 %This file serves as the one-site optimization for minimizeEper.m
 %INPUT: Hleft and Hright tensors, as calculated with updateHleft.m and
 %updateHright.m, the current mpo site hsetj, and the previous mps mpsJ,
@@ -25,6 +25,11 @@ Heff = contracttensors(Hleft,3,2,hsetj,4,1);
 Heff = contracttensors(Heff,5,3,Hright,3,2); 
 
 sizeH=size(Heff)
+
+Heff2=contracttensors(Hleft2,3,2,hsetId,4,1);
+Heff2=contracttensors(Heff2,5,3,Hright2,3,2);
+Heff2 = permute(Heff2,[1,3,5,2,4,6]); %[1,3,2,4,6,5]
+Heff2 = reshape(Heff2,[DAl*DAr*d,DAl*DAr*d]); 
 
 %Heff is initially in the arrangement [a1,a2,o1,o2,b1,b2]
 
@@ -52,9 +57,9 @@ if size(mpsJ,1)>0
     options.v0=initV;
 end
 sizeHeff=size(Heff)
-sizeH2=size(Hleft2)
+sizeHeff2=size(Heff2)
 
-[A,E] = eigs(Heff,Hleft2,1,'sr');%,options); 
+[A,E] = eigs(Heff,Heff2,1,'sr',options);%,options); 
 
 %A==A'
 

@@ -1,4 +1,4 @@
-function [E,mps]=minimizeE(mpo,D,precision)
+function [E,mps, vals, energy]=minimizeE(mpo,D,precision)
 %This file finds the value of E that minimizes <y|mpo|y>/<y|y>, where y is
 %any mps, and mpo is the (open boundary) mpo form of some Hamiltonian H. 
 %This is done via a variational search in the MPS space, for the purpose 
@@ -19,6 +19,8 @@ mps = prepare(mps,'rl');
 Hstorage = initHstorage(mps,mpo,d);
  
 % optimization sweeps 
+vals=[];
+energy=[];
 count =0;
 while 1
     Evalues = [];
@@ -65,9 +67,11 @@ while 1
         % storage-update 
         Hstorage{j}=updateCright(Hright,A,hsetj,A); 
     end
-    %val = std(Evalues)/abs(mean(Evalues))
+    val = std(Evalues)/abs(mean(Evalues))
+    energy=[energy real(E)];
+    vals=[vals val];
     %Evalues = Evalues
-    if (std(Evalues)/abs(mean(Evalues))<precision) 
+    if (std(Evalues)/abs(mean(Evalues))<precision || count>=100) 
         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
         mps{1}=permute(mps{1},[1,3,2]);
         break;

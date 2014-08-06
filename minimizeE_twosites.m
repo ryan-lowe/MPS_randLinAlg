@@ -11,22 +11,34 @@ function [A1,A2,E,Heff] = minimizeE_twosites(hsetj,Hleft,Hright,dir)
 DAl = size(Hleft,1); 
 DAr = size(Hright,1); 
 d = 2;
+Hl=size(hsetj,1);
+Hr=size(hsetj,2);
 
 % calculation of Heff
-sizeH=size(hsetj)
+
+hsetj=reshape(hsetj,[Hl,Hr,d,d,d,d]);
+% sizeH=size(hsetj)
+% sizeright=size(Hright)
+% sizeleft=size(Hleft)
 % hsetj=contracttensors(hsetj1,3,3,hsetj2,3,2);
 % hsetj=reshape(hsetj,[
 
 Heff = contracttensors(Hleft,3,2,hsetj,6,1); 
 Heff = contracttensors(Heff,7,3,Hright,3,2); 
-
+%sizeH=size(Heff)
+Heff=reshape(Heff,[DAl,DAl,d,d,d,d,DAr,DAr]);
 %sizeH=size(Heff)
 
 %Heff is initially in the arrangement [a1,a2,o1,o2,b1,b2]
-sizeHeff=size(Heff)
-Heff = permute(Heff,[1,7,3,4,2,8,5,6]); 
+% sizeHeff=size(Heff)
+Heff = permute(Heff,[1,3,5,7,2,4,6,8]); 
 Heff = reshape(Heff,[DAl*DAr*d*d,DAl*DAr*d*d]); 
 
+if (norm(Heff-Heff')<1e-10)
+    display('conj works');
+else
+    display('conj doesnt work');
+end
 
 %
 % optimization
@@ -34,7 +46,7 @@ Heff = reshape(Heff,[DAl*DAr*d*d,DAl*DAr*d*d]);
 options.disp = 0; 
 [A1,E] = eigs(Heff,1,'sr',options); 
 
-sizeA1=size(A1)
+% sizeA1=size(A1)
 A1=reshape(A1,[DAl*d,DAr*d]);
 [U,S,V]=svd(A1);
 
@@ -43,26 +55,29 @@ A1=reshape(A1,[DAl*d,DAr*d]);
 %'inner dimension' constructed ( = D from original mpo)
 
 %probably isn't correct, though (and still doesn't work for boundaries)
-innerD=8;
-innerDU=min(innerD,size(U,2));
-innerDV=min(innerD,size(V,2));
+% innerD=8;
+% innerDU=min(innerD,size(U,2));
+% innerDV=min(innerD,size(V,2));
+% 
+% U=U(:,1:innerDU);
+% S=S(1:innerDU,1:innerDV);
+% V=V(:,1:innerDV);
 
-U=U(:,1:innerDU);
-S=S(1:innerDU,1:innerDV);
-V=V(:,1:innerDV);
-
-sizeU=size(U)
-sizeS=size(S)
-sizeV=size(V)
+% sizeU=size(U)
+% sizeS=size(S)
+% sizeV=size(V)
 if strcmp(dir,'lr')
     A1=U;
     A2=S*V';   
 else
-    A1=V';
-    A2=U*S;
+    A2=V';
+    A1=U*S;
 end
-% A1=U;
-% A2=S*V';
+innerD1=(size(A1,1)*size(A1,2))/(d*DAl);
+innerD2=(size(A2,1)*size(A2,2))/(d*DAr);
 
-A1=reshape(A1,[DAl,innerD,d]);
-A2=reshape(A2,[innerD,DAr,d]);
+
+A1=reshape(A1,[DAl,innerD1,d]);
+A2=reshape(A2,[innerD2,DAr,d]);
+% sizeA1=size(A1)
+% sizeA2=size(A2)

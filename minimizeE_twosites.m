@@ -60,5 +60,6 @@ innerD2=(size(A2,1)*size(A2,2))/(d*DAr);
 
 A1=reshape(A1,[DAl,innerD1,d]);
 A2=reshape(A2,[innerD2,DAr,d]);
+
 % sizeA1=size(A1)
 % sizeA2=size(A2)

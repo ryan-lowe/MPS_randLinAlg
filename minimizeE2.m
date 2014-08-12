@@ -50,7 +50,6 @@ while 1
         end        
         [A1,U] = prepare_onesite(A1,'lr');
         mps{j} = A1; 
-        %[A2,U] = prepare_onesite(A2,'lr');
         mps{j+1} = A2;
         Evalues = [Evalues,E];
  
@@ -71,15 +70,11 @@ while 1
 
         hsetj=contracttensors(hsetj2,4,2,hsetj1,4,1);
         hsetj=permute(hsetj,[1,4,2,3,5,6]);
-%         HS1=size(hsetj,1);
-%         HS2=size(hsetj,2);
-%         hsetj=reshape(hsetj,[HS1,HS2,4,4]); %probably not right
         mpsJ=contracttensors(mps{j-1},3,2,mps{j},3,1);
         
         [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'rl',mpsJ); 
         [A2,U] = prepare_onesite(A2,'rl');
         mps{j} = A2; 
-        %[A2,U] = prepare_onesite(A2,'rl');
         mps{j-1} = A1;
         Evalues = [Evalues,E];
 

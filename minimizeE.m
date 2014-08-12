@@ -25,7 +25,7 @@ while 1
 
     % ****************** cycle 1: j -> j+1 (from 1 to N-1) **************** 
     for j = 1:(N-1)
-        %j=j
+        j
         % optimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -50,7 +50,7 @@ while 1
 
 % ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
     for j = N:(-1):2
-        %j=j
+        j
         % minimization
         Hleft = Hstorage{j};
         Hright = Hstorage{j+1};
@@ -63,11 +63,11 @@ while 1
         % storage-update 
         Hstorage{j}=updateCright(Hright,A,hsetj,A); 
     end
+    
     val = std(Evalues)/abs(mean(Evalues));
     energy=[energy real(E)];
     vals=[vals val];
-    %Evalues = Evalues
-    if (std(Evalues)/abs(mean(Evalues))<precision || count>=100) 
+    if (std(Evalues)/abs(mean(Evalues))<precision || count>=2) 
         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
         mps{1}=permute(mps{1},[1,3,2]);
         break;

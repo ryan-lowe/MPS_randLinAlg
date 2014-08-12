@@ -14,20 +14,17 @@ d = 2;
 mps = createrandommps(N,D,d); 
 mps = prepare(mps,'rl');
 
-
 % storage-initialization
 Hstorage = initHstorage(mps,mpo,d);
- 
-% optimization sweeps 
 vals=[];
 energy=[];
 count =0;
+% optimization sweeps 
 while 1
     Evalues = [];
 
     % ****************** cycle 1: j -> j+1 (from 1 to N-1) **************** 
     for j = 1:(N-1)
-        %count=count+1
         %j=j
         % optimization
         Hleft = Hstorage{j};
@@ -53,7 +50,6 @@ while 1
 
 % ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
     for j = N:(-1):2
-        %count=count+1
         %j=j
         % minimization
         Hleft = Hstorage{j};
@@ -67,7 +63,7 @@ while 1
         % storage-update 
         Hstorage{j}=updateCright(Hright,A,hsetj,A); 
     end
-    val = std(Evalues)/abs(mean(Evalues))
+    val = std(Evalues)/abs(mean(Evalues));
     energy=[energy real(E)];
     vals=[vals val];
     %Evalues = Evalues

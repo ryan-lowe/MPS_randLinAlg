@@ -37,16 +37,17 @@ while 1
         hsetj2 = mpo{j+1};
         
         hsetj=contracttensors(hsetj1,4,2,hsetj2,4,1);
-        %sizeH1=size(hsetj)
         hsetj=permute(hsetj,[1,4,2,3,5,6]);
-        HS1=size(hsetj,1);
-        HS2=size(hsetj,2);
-        %hsetj=reshape(hsetj,[HS1,HS2,4,4]); %probably not right
-        
-        %sizem1=size(mps{1})
-        %sizem2=size(mps{2})
-        
-        [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr'); 
+
+        %for first iteration, Hleft and Hright dimension modifications
+        %by prepare.m cause initialization vector mps{j} for eigs
+        %to be wrong dimension        
+        if count==0
+          [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr',[]); 
+        else
+          mpsJ=contracttensors(mps{j},3,2,mps{j+1},3,1);
+          [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr',mpsJ); 
+        end        
         [A1,U] = prepare_onesite(A1,'lr');
         mps{j} = A1; 
         %[A2,U] = prepare_onesite(A2,'lr');
@@ -61,21 +62,21 @@ while 1
 
     % ****************** cycle 2: j -> j-1 (from N to 2) ****************** 
     for j = N:(-1):2
-
+    
         % minimization
         Hleft = Hstorage{j-1};
         Hright = Hstorage{j+1};
         hsetj1 = mpo{j};
         hsetj2 = mpo{j-1};
-%         h1=size(hsetj1)
-%         h2=size(hsetj2)
+
         hsetj=contracttensors(hsetj2,4,2,hsetj1,4,1);
         hsetj=permute(hsetj,[1,4,2,3,5,6]);
-        HS1=size(hsetj,1);
-        HS2=size(hsetj,2);
-        hsetj=reshape(hsetj,[HS1,HS2,4,4]); %probably not right
+%         HS1=size(hsetj,1);
+%         HS2=size(hsetj,2);
+%         hsetj=reshape(hsetj,[HS1,HS2,4,4]); %probably not right
+        mpsJ=contracttensors(mps{j-1},3,2,mps{j},3,1);
         
-        [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'rl'); 
+        [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'rl',mpsJ); 
         [A2,U] = prepare_onesite(A2,'rl');
         mps{j} = A2; 
         %[A2,U] = prepare_onesite(A2,'rl');

@@ -25,8 +25,8 @@ end
 % storage-initialization
 Hstorage = initHstorage(mps,mpo,d);
 Hstorage2 = initHstorage(mps,mpoId,d);
- sizeHS2=size(Hstorage2)
- Hstorage2=Hstorage2
+% sizeHS2=size(Hstorage2)
+% Hstorage2=Hstorage2
 % optimization sweeps 
 count = 0;
 vals=[];
@@ -67,8 +67,8 @@ while 1
     vals=[vals val];
     energy=[energy real(E)];
     if (std(Evalues)/abs(mean(Evalues))<precision || count>=100) 
-        mps{1}=contracttensors(mps{1},3,2,U,2,1); 
-        mps{1}=permute(mps{1},[1,3,2]);
+%         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
+%         mps{1}=permute(mps{1},[1,3,2]);
         break;
     end
     

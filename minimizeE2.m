@@ -37,15 +37,18 @@ while 1
         hsetj2 = mpo{j+1};
         
         hsetj=contracttensors(hsetj1,4,2,hsetj2,4,1);
-        hsetj=permute(hsetj,[1,4,2,3,5,6]);
+        hsetj=permute(hsetj,[1,4,2,3,5,6]);%[1,4,2,3,5,6]
 
         %for first iteration, Hleft and Hright dimension modifications
         %by prepare.m cause initialization vector mps{j} for eigs
         %to be wrong dimension        
         if count==0
-          [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr',[]); 
+            mpsJ=contracttensors(mps{j},3,2,mps{j+1},3,1);
+            mpsJ=permute(mpsJ,[1,3,2,4]);
+            [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr',mpsJ); 
         else
           mpsJ=contracttensors(mps{j},3,2,mps{j+1},3,1);
+          mpsJ=permute(mpsJ,[1,3,2,4]);
           [A1,A2,E] = minimizeE_twosites(hsetj,Hleft,Hright,'lr',mpsJ); 
         end        
         [A1,U] = prepare_onesite(A1,'lr');

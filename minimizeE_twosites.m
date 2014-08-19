@@ -22,9 +22,9 @@ Heff = contracttensors(Heff,7,3,Hright,3,2);
 
 Heff=reshape(Heff,[DAl,DAl,d,d,d,d,DAr,DAr]);
 
-%Heff is initially in the arrangement [a1,a2,o1,o2,b1,b2]
+%Heff is initially in the arrangement [a1,a2,o2,o1,s2,s1,b1,b2]
 
-Heff = permute(Heff,[1,3,5,7,2,4,6,8]); 
+Heff = permute(Heff,[1,4,6,7,2,3,5,8]); 
 Heff = reshape(Heff,[DAl*DAr*d*d,DAl*DAr*d*d]); 
 
 % if (norm(Heff-Heff')<1e-10)

@@ -50,23 +50,27 @@ while 1
         %for first iteration, Hleft and Hright dimension modifications
         %by prepare.m cause initialization vector mps{j} for eigs
         %to be wrong dimension
-        if count==0
-            [A,E] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,Hright2,hsetId,[]);             
-        else
+%         if count==0
+%             [A,E] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,Hright2,hsetId,[]);             
+%         else
             [A,E] = minimizeEper_onesite(hsetj,Hleft,Hright,Hleft2,Hright2,hsetId,mps{j}); 
-        end
-        [A,U] = prepare_onesite(A,'rl');
+%         end
+
+%         [A,U] = prepare_onesite(A,'rl');
+%         mps{j+1}=contracttensors(U,2,2,mps{j+1},3,1);   
+
         mps{j} = A; 
         Evalues = [Evalues,E];
  
         % storage-update 
         Hstorage{j+1} = updateCleft(Hleft,A,hsetj,A); 
     end
+    Evalues
     count=count+1
     val=std(Evalues)/abs(mean(Evalues));
     vals=[vals val];
     energy=[energy real(E)];
-    if (std(Evalues)/abs(mean(Evalues))<precision || count>=100) 
+    if (val<precision || count>=10) 
 %         mps{1}=contracttensors(mps{1},3,2,U,2,1); 
 %         mps{1}=permute(mps{1},[1,3,2]);
         break;

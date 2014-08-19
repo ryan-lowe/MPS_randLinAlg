@@ -21,20 +21,21 @@ Heff = contracttensors(Heff,5,3,Hright,3,2);
 
 Heff2=contracttensors(Hleft2,3,2,hsetId,4,1);
 Heff2=contracttensors(Heff2,5,3,Hright2,3,2);
-Heff2 = permute(Heff2,[1,3,5,2,4,6]);
+
+Heff2 = permute(Heff2,[1,5,4,2,6,3]);
 Heff2 = reshape(Heff2,[DAl*DAr*d,DAl*DAr*d]); 
 
-%Heff is initially in the arrangement [a1,a2,o1,o2,b1,b2]
+%Heff is initially in the arrangement [a1,a2,o2,o1,b1,b2]
 
-Heff = permute(Heff,[1,3,5,2,4,6]); 
+Heff = permute(Heff,[1,5,4,2,6,3]); 
 Heff = reshape(Heff,[DAl*DAr*d,DAl*DAr*d]); 
 
 
-% if (norm(Heff-Heff')<1e-10)
-%     display('conj works');
-% else
-%     display('conj doesnt work');
-% end
+if (norm(Heff-Heff')<1e-10)
+    display('conj works');
+else
+    display('conj doesnt work');
+end
 
 % optimization
 options.disp = 0; 
